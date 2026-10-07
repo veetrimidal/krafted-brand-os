@@ -1,2 +1,10 @@
 .DS_Store
 .netlify/
+.env.local
+
+.env*
+!.env.example
+node_modules/
+dist/
+
+.pnpm-store/

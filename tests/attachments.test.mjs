@@ -1,0 +1,14 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {attachmentParts} from '../server/chat-attachments.mjs';
+import {validatePayload} from '../server/brandie.mjs';
+import vm from 'node:vm';
+import {readFileSync} from 'node:fs';
+const pdf={name:'brief.pdf',type:'application/pdf',data:'data:application/pdf;base64,'+Buffer.from('%PDF-1.4\ntest').toString('base64')};
+const png={name:'sample.png',type:'image/png',data:'data:image/png;base64,'+Buffer.from([137,80,78,71,13,10,26,10,0]).toString('base64')};
+const txt={name:'brief.txt',type:'text/plain',text:'Audience: independent designers'};
+test('attachment types map to Responses API parts',()=>{const parts=attachmentParts([pdf,png,txt]);assert.equal(parts[0].type,'input_file');assert.equal(parts[0].filename,'brief.pdf');assert.equal(parts[1].type,'input_image');assert.match(parts[2].text,/independent designers/)});
+test('reject unsupported, mismatched, oversized and excessive files',()=>{for(const files of [[{...pdf,type:'text/html'}],[{...png,data:pdf.data}],[{...pdf,data:'data:application/pdf;base64,YWJjZA=='}],[txt,txt,txt,txt],[{...txt,text:'x'.repeat(100001)}],[{...pdf,data:'data:application/pdf;base64,'+Buffer.alloc(2097153).toString('base64')}]] )assert.throws(()=>attachmentParts(files))});
+test('attachments can only enter the last user message and retain a text prompt',()=>{const data={context:{},messages:[{role:'user',content:'Review this.',attachments:[txt]}]};const result=validatePayload(data);assert.equal(result.messages[0].content[0].text,'Review this.');assert.equal(result.messages[0].content[1].type,'input_text');assert.throws(()=>validatePayload({...data,messages:[...data.messages,{role:'user',content:'Another question'}]}))});
+test('metadata persists without bytes; session data supports retry and is isolated',()=>{const ctx={esc:String};vm.createContext(ctx);vm.runInContext(readFileSync('assets/chat-attachments.js','utf8'),ctx);vm.runInContext(`chatFileData.set('file1',{id:'file1',name:'note.txt',type:'text/plain',text:'Private reference',size:17});chatFileDrafts.set('brandie:one',[chatFileData.get('file1')]);`,ctx);const meta=ctx.chatTakeFiles('brandie','one');assert(!JSON.stringify(meta).includes('Private reference'));assert.equal(ctx.chatFiles('kraftie','one').length,0);const message={role:'user',text:'Review',attachments:meta};assert.equal(ctx.chatMessagePayload(message,true).attachments[0].text,'Private reference');assert.equal(ctx.chatMessagePayload(message,false).attachments,undefined);ctx.chatClearFiles('brandie',{id:'one',messages:[message]});assert.throws(()=>ctx.chatMessagePayload(message,true),/reattach/)});
+test('all chat scripts parse together without conflicting declarations',()=>{new vm.Script(['chat-attachments','brandie-live','kraftie-live'].map(name=>readFileSync('assets/'+name+'.js','utf8')).join('\n'))});

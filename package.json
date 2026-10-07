@@ -1,0 +1,21 @@
+{
+  "name": "krafted-brand-os",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "dev": "netlify dev"
+  },
+  "dependencies": {
+    "@netlify/database": "^2.0.1",
+    "@netlify/identity": "^2.0.0",
+    "openai": "^6.0.0"
+  },
+  "devDependencies": {
+    "@netlify/database-dev": "^1.0.1",
+    "@netlify/functions": "^5.0.0",
+    "esbuild": "^0.28.2",
+    "netlify-cli": "^27.11.2"
+  }
+}

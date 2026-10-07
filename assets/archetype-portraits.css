@@ -1,0 +1,17 @@
+.archetype-rank-card .archetype-portrait {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: center 28%;
+  margin: 14px 0 16px;
+  border-radius: 12px;
+  background: #c9f52c;
+}
+
+@media (max-width: 850px) {
+  .archetype-rank-card .archetype-portrait {
+    max-height: 420px;
+  }
+}

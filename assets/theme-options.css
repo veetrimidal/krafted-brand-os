@@ -116,6 +116,19 @@
   html[data-theme="light"] #view .archetype-rank-card:first-child { background: #f3f8ea; border-color: #9fbd77; }
   html[data-theme="light"] #view :is(.pill,.token,.archetype-chip,.rank) { color: #28462e; background: #eaf1e6; border-color: #d4e2ce; }
   html[data-theme="light"] #view .book-thumb.active { color: #111711; background: #c9f52c; }
+  html[data-theme="light"] #view .book-thumbs .book-thumb:not(.active) { color: #243424; }
+  html[data-theme="light"] #view .book-thumbs .book-thumb:not(.active) small { color: #50664b; }
+  html[data-theme="light"] #view .book-thumbs .book-thumb:not(.active):is(:hover,:focus-visible) {
+    color: #193019;
+    background: #f0f8e5;
+    border-color: #8fc542;
+  }
+
+  /* Brand DNA's inline dark synthesis panel stays dark in either mode. */
+  #view .card[style*="#293825"] { color: #f5eee8; border-color: #516743; }
+  #view .card[style*="#293825"] h2 { color: #f5eee8 !important; }
+  #view .card[style*="#293825"] .kicker { color: #c9f52c !important; }
+  #view .card[style*="#293825"] p { color: #e1e9dc !important; }
 
   html[data-theme="light"] #view .brandie-workspace { color-scheme: light; --ink:#111711; --muted:#5d695b; --line:#d9ded6; color:#111711; background:#fff; border-color:#d9ded6; box-shadow:0 12px 34px rgba(17,23,17,.08); }
   html[data-theme="light"] #view .brandie-workspace :is(.brandie-history,.brandie-context,.brandie-composer) { color:#111711; background:#f3f6f1; border-color:#d9ded6; }

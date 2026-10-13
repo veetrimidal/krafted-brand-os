@@ -3,6 +3,7 @@ let account=null,settings=null,workspaces=[],active=null,pending=null,saving=nul
 const originalRender=render;
 const gate=document.createElement('section');gate.id='accountGate';document.body.append(gate);
 const cloudKeys=['brand','archetype','clarity','dna','multiplier','funnel','guidelines','assets','brandie','kraftie','websiteBrief','visualAxes'];
+window.brandOsBoardCloud={workspaceId:()=>active?.id||null,request:api,flush:flushCloud};
 const snapshot=()=>JSON.parse(JSON.stringify(Object.fromEntries(cloudKeys.filter(k=>Object.hasOwn(state,k)).map(k=>[k,state[k]]))));
 function lock(){document.documentElement.classList.add('account-locked');state.session=false}
 function unlock(){document.documentElement.classList.remove('account-locked');gate.hidden=true}

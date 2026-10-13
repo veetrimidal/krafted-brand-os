@@ -128,8 +128,9 @@ button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}
 </style>
 <link rel="stylesheet" href="assets/archetype-palettes.css">
 <link rel="stylesheet" href="assets/archetype-portraits.css">
-  <link rel="stylesheet" href="assets/dark-panels.css">
+<link rel="stylesheet" href="assets/dark-panels.css">
 <link rel="stylesheet" href="assets/theme-options.css">
+<link rel="stylesheet" href="assets/content-board.css">
 </head>
 <body>
 <section id="authScreen" class="screen auth">
@@ -177,6 +178,7 @@ button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}
       <button data-page="dna">⚯ Brand DNA</button>
       <button data-page="guidelines">☷ Brand Guidelines</button>
       <button data-page="multiplier">⌘ Content Multiplier</button>
+      <div class="nav-subnav"><button data-page="content-board">▦ Content Board</button></div>
       <div class="section">AI Partners</div>
       <button data-page="brandie">◉ Brandie</button>
       <button data-page="kraftie">✎ Kraftie</button>
@@ -244,10 +246,10 @@ function render(){
  if(!state.session){document.getElementById('authScreen').classList.remove('hidden');document.getElementById('app').style.display='none';return}
  showApp();
  const page=location.hash.slice(1)||(!state.brand.created?'onboarding':'overview');
- document.querySelectorAll('.nav button').forEach(b=>{b.classList.toggle('active',b.dataset.page===page);b.classList.toggle('parent-active',b.dataset.page==='brand'&&['archetype','clarity'].includes(page))});
- document.getElementById('crumb').textContent=page==='onboarding'?'Create your brand':page==='archetype'?'Brand Archetype':page[0].toUpperCase()+page.slice(1);
+ document.querySelectorAll('.nav button').forEach(b=>{b.classList.toggle('active',b.dataset.page===page);b.classList.toggle('parent-active',(b.dataset.page==='brand'&&['archetype','clarity'].includes(page))||(b.dataset.page==='multiplier'&&page==='content-board'))});
+ document.getElementById('crumb').textContent=page==='onboarding'?'Create your brand':page==='archetype'?'Brand Archetype':page==='multiplier'?'AI Generator':page==='content-board'?'Content Board':page[0].toUpperCase()+page.slice(1);
  const v=document.getElementById('view');
- ({overview:overview,brand:brandPage,archetype:archetypePage,clarity:clarityPage,funnel:funnelPage,website:websitePage,dna:dnaPage,guidelines:guidelinesPage,multiplier:multiplierPage,brandie:brandiePage,kraftie:kraftiePage,assets:assetsPage,onboarding:onboardingPage}[page]||overview)(v);
+ ({overview:overview,brand:brandPage,archetype:archetypePage,clarity:clarityPage,funnel:funnelPage,website:websitePage,dna:dnaPage,guidelines:guidelinesPage,multiplier:multiplierPage,'content-board':contentBoardPage,brandie:brandiePage,kraftie:kraftiePage,assets:assetsPage,onboarding:onboardingPage}[page]||overview)(v);
 }
 function completion(){
  const b=state.brand.created?1:0; const a=state.archetype.status==='complete'?1:0; const c=state.clarity.status==='complete'?1:0; const d=state.dna.status!=='empty'?1:0;
@@ -656,6 +658,7 @@ if(state.session)render();
 <script src="assets/kraftie-live.js"></script>
 <script src="assets/chat-conversations.js"></script>
 <script src="assets/brand-os-ai.js"></script>
+<script src="assets/content-board.js"></script>
 <script src="assets/workspace-store.js"></script>
 <script src="assets/workspaces.js"></script>
 <script src="assets/brand-cursor.js"></script>

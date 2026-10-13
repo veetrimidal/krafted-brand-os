@@ -1,0 +1,151 @@
+/* Carry the Brandie/Kraftie panel language through the rest of Brand OS.
+   The printable Brand Guidelines pages deliberately retain their own palette. */
+@media screen {
+  #view :is(.card,.section-card,.dna-section,.mini-card,.trait-box,.asset-card,
+    .archetype-rank-card,.archetype-guidance-item,.archetype-strategy,
+    .optimization-panel,.book-thumbs,.book-controls,.logo-role-card,
+    .logo-library,.brand-status-grid>div,.choice,.check-card,.choice-inline label,
+    .notice,.synth-note):not(.brand-book-page) {
+    color-scheme: dark;
+    --ink: #f5eee8;
+    --muted: #b9c3b2;
+    --line: #3c472f;
+    color: #f5eee8;
+    border-color: #3c472f;
+    background: radial-gradient(ellipse at 100% 0%,rgba(201,245,44,.07),transparent 55%),
+      linear-gradient(145deg,#20251d,#171b18 72%);
+    box-shadow: 0 14px 36px rgba(17,23,17,.16);
+  }
+
+  #view :is(.card,.section-card,.dna-section,.mini-card,.trait-box,.asset-card,
+    .archetype-rank-card,.archetype-guidance-item,.archetype-strategy,
+    .optimization-panel,.book-thumbs,.book-controls,.logo-role-card,.logo-library)
+    :is(h2,h3,strong,b) { color: #f5eee8; }
+  #view :is(.card,.section-card,.dna-section,.mini-card,.trait-box,.asset-card,
+    .archetype-rank-card,.archetype-guidance-item,.archetype-strategy,
+    .optimization-panel,.book-thumbs,.book-controls,.logo-role-card,.logo-library)
+    :is(.muted,small,.help,.asset-copy,.confidence,.progress-meta,.section-head p) {
+    color: #b9c3b2;
+  }
+  #view :is(.card,.section-card,.dna-section,.mini-card,.trait-box,.asset-card,
+    .archetype-rank-card,.archetype-guidance-item,.archetype-strategy,
+    .optimization-panel,.book-thumbs,.book-controls,.logo-role-card,.logo-library)
+    .kicker { color: #c9f52c; }
+
+  #view .card .mini-card,
+  #view .card :is(.notice,.synth-note,.trait-box,.asset-card,.logo-role-card),
+  #view .section-card :is(.notice,.synth-note) {
+    background: linear-gradient(135deg,#2b3326,#222922);
+    border-color: #465437;
+    box-shadow: none;
+  }
+  #view .section-head {
+    color: #f5eee8;
+    background: #252c23;
+    border-bottom-color: #3c472f;
+  }
+  #view :is(.card,.section-card,.dna-section) :is(.module,.divider,.retake) {
+    border-color: #3c472f;
+  }
+  #view :is(.card,.section-card,.dna-section) .divider { background: #3c472f; }
+  #view :is(.card,.section-card,.dna-section,.optimization-panel) .icon {
+    background: #2d3628;
+  }
+  #view :is(.card,.section-card,.dna-section,.asset-card,.logo-role-card,.logo-library)
+    :is(input:not([type]),input[type="text"],input[type="url"],input[type="email"],
+      textarea,select,.textarea,.select) {
+    color-scheme: dark;
+    color: #f5eee8;
+    background: #171b18;
+    border-color: #53613f;
+  }
+  #view :is(.card,.section-card,.dna-section,.asset-card,.logo-role-card,.logo-library)
+    :is(input,textarea,.textarea)::placeholder { color: #a9b4a1; }
+  #view :is(.card,.section-card,.dna-section,.asset-card,.logo-role-card,.logo-library)
+    :is(input,textarea,select,.textarea,.select):focus-visible {
+    outline: 2px solid #c9f52c;
+    outline-offset: 2px;
+  }
+  #view :is(.card,.section-card,.dna-section,.mini-card,.asset-card,.logo-role-card)
+    .btn.secondary,
+  #view .book-controls .btn.secondary {
+    color: #e4edda;
+    background: #2a3226;
+    border-color: #4d5b3c;
+  }
+  #view :is(.card,.section-card,.dna-section,.mini-card,.asset-card,.logo-role-card)
+    .btn.secondary:hover,
+  #view .book-controls .btn.secondary:hover {
+    color: #c9f52c;
+    border-color: #c9f52c;
+  }
+  #view :is(.card,.section-card,.dna-section,.optimization-panel,.asset-card)
+    .btn.orange {
+    color: #111711;
+    background: #c9f52c;
+    border-color: #c9f52c;
+  }
+  #view :is(.card,.section-card,.dna-section,.mini-card,.asset-card) .pill,
+  #view :is(.card,.dna-section,.logo-library) .token,
+  #view :is(.card,.dna-section) .archetype-chip {
+    color: #d9f986;
+    background: #303c28;
+    border-color: #53683b;
+  }
+
+  #view .choice:hover,
+  #view .check-card:hover,
+  #view .choice-inline label:hover { border-color: #c9f52c; }
+  #view .choice.selected {
+    color: #f5eee8;
+    border-color: #c9f52c;
+    background: linear-gradient(135deg,#35452a,#222b22);
+    box-shadow: 0 0 0 2px rgba(201,245,44,.16);
+  }
+  #view .choice .tag,
+  #view .choice.selected .tag { color: #c9f52c; }
+  #view .check-card input[type="checkbox"] {
+    border-color: #899a78;
+    background: #171b18;
+  }
+  #view .check-card:has(input[type="checkbox"]:checked) {
+    color: #fff;
+    border-color: #c9f52c;
+    background: linear-gradient(rgba(10,16,10,.88),rgba(10,16,10,.94)),
+      url('lime-texture.png') center/cover;
+  }
+  #view .check-card:has(input[type="checkbox"]:checked) input[type="checkbox"] {
+    background: #c9f52c;
+    border-color: #c9f52c;
+  }
+  #view .check-card:has(input[type="checkbox"]:checked) input[type="checkbox"]:after {
+    color: #111711;
+  }
+  #view .rank,
+  #view .icon { color: #f16223; }
+  #view .rank { background: #2d3628; }
+  #view .archetype-rank-card .rank-score,
+  #view .archetype-guidance-item b,
+  #view .brand-status-grid span { color: #c9f52c; }
+  #view .archetype-rank-card:first-child {
+    background: radial-gradient(ellipse at 100% 0%,rgba(201,245,44,.16),transparent 60%),
+      linear-gradient(135deg,#273721,#172017);
+    border-color: #789a44;
+  }
+  #view .book-thumb { color: #f5eee8; }
+  #view .book-thumb small { color: #b9c3b2; }
+  #view .book-thumb:hover { border-color: #c9f52c; }
+  #view .book-thumb.active { color: #111711; background: #c9f52c; }
+  #view .book-thumb.active small { color: #31441f; }
+
+  #view .brandie-workspace .notice {
+    color: #e7d8cc;
+    background: linear-gradient(120deg,rgba(76,98,31,.22),rgba(31,38,27,.75));
+    border-color: #4b5934;
+    box-shadow: none;
+  }
+
+  /* A brand book is an exportable document, not an app panel. */
+  #view .brand-book-page,
+  #view .brand-book-page * { color-scheme: light; }
+}

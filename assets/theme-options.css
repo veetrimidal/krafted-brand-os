@@ -1,0 +1,147 @@
+/* Browser-local appearance choice. Brand Guidelines document pages stay print-ready. */
+@media screen {
+  .theme-switch {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 34px;
+    padding: 6px 11px;
+    border: 1px solid #647b42;
+    border-radius: 999px;
+    background: #24301f;
+    color: #d9f986;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 850;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .theme-switch:hover { border-color: #c9f52c; box-shadow: 0 0 18px rgba(201,245,44,.22); }
+  .theme-switch:focus-visible { outline: 2px solid #c9f52c; outline-offset: 3px; }
+  .theme-switch-icon { font-size: 16px; line-height: 1; }
+
+  html[data-theme="dark"] .main {
+    color: #f5eee8;
+    background: linear-gradient(rgba(15,21,15,.94),rgba(15,21,15,.97)),
+      url('lime-texture.png') center/cover fixed;
+  }
+  html[data-theme="dark"] .top {
+    color: #f5eee8;
+    background: rgba(20,28,20,.9);
+    border-bottom-color: #3c472f;
+  }
+  html[data-theme="dark"] :is(.crumb,.userbox small,#view .hero p,#view .muted,#view .help) { color: #b9c3b2; }
+  html[data-theme="dark"] #view :is(.hero h1,.hero h2,.question h2,.clarity-head h1) { color: #f5eee8; }
+  html[data-theme="dark"] #view :is(.eyebrow,.kicker) { color: #c9f52c; }
+  html[data-theme="dark"] #view :is(.step,.progress,.result-bar) { background-color: #3c472f; }
+  html[data-theme="dark"] #view :is(.field input,.textarea,.select,.sticky-actions) {
+    color-scheme: dark;
+    color: #f5eee8;
+    background: #1a211a;
+    border-color: #4b5b39;
+  }
+  html[data-theme="dark"] #view :is(.field input,.textarea)::placeholder { color: #a7b4a0; }
+  html[data-theme="dark"] #view .btn.secondary { color: #e4edda; background: #2a3226; border-color: #4d5b3c; }
+  html[data-theme="dark"] #view .btn.secondary:hover { color: #d9f986; border-color: #c9f52c; }
+  html[data-theme="dark"] #view .brandie-workspace .btn.orange { background: #c9f52c; border-color: #c9f52c; color: #111711; }
+  html[data-theme="dark"] #view .brandie-workspace .btn.orange:hover:not(:disabled) { background: #def988; }
+
+  /* The same soft lime halo used in sidebar interactions. */
+  html[data-theme="dark"] #view :is(.card,.section-card,.dna-section,.mini-card,
+    .trait-box,.asset-card,.archetype-rank-card,.archetype-guidance-item,
+    .archetype-strategy,.optimization-panel,.book-controls,.logo-role-card,
+    .logo-library,.choice,.check-card,.brandie-workspace):hover {
+    border-color: #a4d74d;
+    box-shadow: 0 0 0 1px rgba(201,245,44,.48), 0 0 26px rgba(201,245,44,.16),
+      0 14px 36px rgba(0,0,0,.23);
+  }
+  html[data-theme="dark"] #view :is(.card,.section-card,.dna-section,.mini-card,
+    .trait-box,.asset-card,.archetype-rank-card,.archetype-guidance-item,
+    .archetype-strategy,.optimization-panel,.book-controls,.logo-role-card,
+    .logo-library,.choice,.check-card,.brandie-workspace) {
+    transition: border-color .2s ease, box-shadow .2s ease;
+  }
+  html[data-theme="dark"] #view :is(.card,.section-card,.dna-section,.brandie-workspace,
+    .archetype-rank-card) :is(button,input,textarea,select,.pill,.token,.choice,
+    .check-card,.trait-box,.mini-card,.logo-role-card,.archetype-guidance-item):hover {
+    border-color: #c9f52c;
+  }
+
+  html[data-theme="light"] .main {
+    color: #111711;
+    background: linear-gradient(rgba(248,248,246,.88),rgba(248,248,246,.94)),
+      url('lime-texture.png') center/cover fixed;
+  }
+  html[data-theme="light"] .top { color: #111711; background: rgba(248,248,246,.85); border-bottom-color: #d9ded6; }
+  html[data-theme="light"] :is(.crumb,.userbox small) { color: #566354; }
+  html[data-theme="light"] .theme-switch { background: #eaf1dd; color: #28462e; border-color: #c0d296; }
+  html[data-theme="light"] #view :is(.card,.section-card,.dna-section,.mini-card,.trait-box,
+    .asset-card,.archetype-rank-card,.archetype-guidance-item,.archetype-strategy,
+    .optimization-panel,.book-thumbs,.book-controls,.logo-role-card,.logo-library,
+    .brand-status-grid>div,.choice,.check-card,.choice-inline label,.notice,.synth-note) {
+    color-scheme: light;
+    --ink: #111711;
+    --muted: #5d695b;
+    --line: #d9ded6;
+    color: #111711;
+    background: #fff;
+    border-color: #d9ded6;
+    box-shadow: 0 10px 28px rgba(17,23,17,.06);
+  }
+  html[data-theme="light"] #view :is(.card,.section-card,.dna-section,.mini-card,.trait-box,
+    .asset-card,.archetype-rank-card,.archetype-guidance-item,.archetype-strategy,
+    .optimization-panel,.book-controls,.logo-role-card,.logo-library) :is(h2,h3,strong,b) { color: #111711; }
+  html[data-theme="light"] #view :is(.card,.section-card,.dna-section,.mini-card,.asset-card,
+    .logo-role-card,.archetype-rank-card,.archetype-guidance-item) :is(.muted,small,.help,.asset-copy) { color: #5d695b; }
+  html[data-theme="light"] #view :is(.card,.section-card,.dna-section,.mini-card,.asset-card,
+    .logo-role-card,.archetype-rank-card,.archetype-guidance-item) .kicker { color: #426149; }
+  html[data-theme="light"] #view .section-head { color: #111711; background: #f2f5ef; border-bottom-color: #d9ded6; }
+  html[data-theme="light"] #view :is(.card,.section-card,.dna-section) :is(.divider,.module,.retake) { border-color: #d9ded6; }
+  html[data-theme="light"] #view :is(.card,.section-card,.dna-section) .divider { background: #d9ded6; }
+  html[data-theme="light"] #view :is(.field input,.textarea,.select,.sticky-actions) {
+    color-scheme: light;
+    color: #111711;
+    background: #fff;
+    border-color: #cbd4c6;
+  }
+  html[data-theme="light"] #view .btn.secondary { color: #28462e; background: #fff; border-color: #b6c6af; }
+  html[data-theme="light"] #view .choice.selected { background: #eff8e7; border-color: #426149; }
+  html[data-theme="light"] #view .check-card input[type="checkbox"] { background: #fff; border-color: #426149; }
+  html[data-theme="light"] #view .check-card:has(input[type="checkbox"]:checked) {
+    color: #fff;
+    background: linear-gradient(rgba(10,16,10,.88),rgba(10,16,10,.94)),url('lime-texture.png') center/cover;
+    border-color: #c9f52c;
+  }
+  html[data-theme="light"] #view .archetype-rank-card:first-child { background: #f3f8ea; border-color: #9fbd77; }
+  html[data-theme="light"] #view :is(.pill,.token,.archetype-chip,.rank) { color: #28462e; background: #eaf1e6; border-color: #d4e2ce; }
+  html[data-theme="light"] #view .book-thumb.active { color: #111711; background: #c9f52c; }
+
+  html[data-theme="light"] #view .brandie-workspace { color-scheme: light; --ink:#111711; --muted:#5d695b; --line:#d9ded6; color:#111711; background:#fff; border-color:#d9ded6; box-shadow:0 12px 34px rgba(17,23,17,.08); }
+  html[data-theme="light"] #view .brandie-workspace :is(.brandie-history,.brandie-context,.brandie-composer) { color:#111711; background:#f3f6f1; border-color:#d9ded6; }
+  html[data-theme="light"] #view .brandie-workspace .brandie-chat { background:#fff; }
+  html[data-theme="light"] #view .brandie-workspace :is(h2,h3) { color:#111711; }
+  html[data-theme="light"] #view .brandie-workspace :is(.muted,small,.brandie-sources) { color:#5d695b; }
+  html[data-theme="light"] #view .brandie-workspace .kicker { color:#426149; }
+  html[data-theme="light"] #view .brandie-workspace :is(.brandie-message,.brandie-quick button,.brandie-conversation,.chat-file-card) { color:#111711; background:#f5f7f2; border-color:#d9ded6; }
+  html[data-theme="light"] #view .brandie-workspace .brandie-message.user { color:#fff; background:#28462e; }
+  html[data-theme="light"] #view .brandie-workspace :is(.notice,.brandie-readiness) { color:#28462e; background:#eaf1e6; border-color:#c8d8bf; }
+  html[data-theme="light"] #view .brandie-workspace .brandie-context-item { border-color:#d9ded6; }
+  html[data-theme="light"] #view .brandie-workspace :is(.brandie-composer textarea,.brandie-composer textarea:disabled) { color:#111711; background:#fff; border-color:#b6c6af; }
+  html[data-theme="light"] #view .brandie-workspace .btn.secondary { color:#28462e; background:#fff; border-color:#b6c6af; }
+  html[data-theme="light"] #view .brandie-workspace .btn.orange { color:#111711; background:#c9f52c; border-color:#c9f52c; }
+
+  .archetype-result-actions { display:flex; gap:9px; align-items:center; flex-wrap:wrap; }
+  .archetype-download { white-space:nowrap; }
+  @media (max-width: 650px) {
+    .theme-switch-label { display:none; }
+    .theme-switch { min-width:36px; padding:6px; }
+    .archetype-result-actions { margin-top:12px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html[data-theme="dark"] #view :is(.card,.section-card,.dna-section,.mini-card,.trait-box,
+      .asset-card,.archetype-rank-card,.archetype-guidance-item,.archetype-strategy,
+      .optimization-panel,.book-controls,.logo-role-card,.logo-library,.choice,
+      .check-card,.brandie-workspace) { transition:none; }
+  }
+}

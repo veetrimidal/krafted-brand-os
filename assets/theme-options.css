@@ -47,6 +47,37 @@
   html[data-theme="dark"] #view .brandie-workspace .btn.orange { background: #c9f52c; border-color: #c9f52c; color: #111711; }
   html[data-theme="dark"] #view .brandie-workspace .btn.orange:hover:not(:disabled) { background: #def988; }
 
+  /* Keep multiplier content readable on dark panels. */
+  html[data-theme="dark"] #view .idea-list > div {
+    color: #f5eee8;
+    background: #273126;
+    border: 1px solid #465437;
+  }
+  html[data-theme="dark"] #view .multiply-btn {
+    color: #111711;
+    background: #f16223;
+    border-color: #f16223;
+    cursor: pointer;
+  }
+  html[data-theme="dark"] #view .multiply-btn:is(:hover,:focus-visible) {
+    color: #111711;
+    background: #ff8048;
+    border-color: #ff8048;
+    box-shadow: 0 0 18px rgba(241,98,35,.25);
+  }
+
+  /* The Guidelines preview is a light document, even when the app is dark. */
+  html[data-theme="dark"] #view .brand-book-page {
+    --ink: #111711;
+    --muted: #455145;
+    color: #111711;
+  }
+  html[data-theme="dark"] #view .brand-book-page .book-page:not(.book-cover) > h1,
+  html[data-theme="dark"] #view .brand-book-page .book-rule b,
+  html[data-theme="dark"] #view .brand-book-page .book-split h3 {
+    color: #111711;
+  }
+
   /* The same soft lime halo used in sidebar interactions. */
   html[data-theme="dark"] #view :is(.card,.section-card,.dna-section,.mini-card,
     .trait-box,.asset-card,.archetype-rank-card,.archetype-guidance-item,

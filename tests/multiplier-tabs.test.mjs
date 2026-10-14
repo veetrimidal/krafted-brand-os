@@ -3,7 +3,9 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 
-test('Content Board renders as a fourth Content Multiplier tab and keeps old links working',()=>{
+test('Content Multiplier sections live in the sidebar and old Content Board links still work',()=>{
+ const index=readFileSync(new URL('../index.html',import.meta.url),'utf8');
+ for(const tab of ['plan','history','sources','board'])assert.match(index,new RegExp(`data-multiplier-tab="${tab}"`));
  const view={innerHTML:'',insertAdjacentHTML(_position,html){this.innerHTML=html+this.innerHTML},querySelectorAll(){return []},querySelector(){return {insertAdjacentHTML(){}}}};
  const location={hash:'#multiplier'};
  const sandbox={
@@ -18,18 +20,21 @@ test('Content Board renders as a fourth Content Multiplier tab and keeps old lin
  vm.runInContext(readFileSync(new URL('../assets/multiplier-library.js',import.meta.url),'utf8'),sandbox);
 
  sandbox.multiplierPage(view);
- assert.match(view.innerHTML,/Content Board<\/button>/);
+ assert.doesNotMatch(view.innerHTML,/Content Multiplier sections/);
  assert.match(view.innerHTML,/Current plan<\/main>/);
 
+ location.hash='#overview';
+ vm.runInContext("mlTab('history')",sandbox);
+ assert.equal(location.hash,'multiplier');
+ assert.match(view.innerHTML,/Multiplication history\./);
+
  vm.runInContext("mlTab('board')",sandbox);
- assert.match(view.innerHTML,/class="active" onclick="mlTab\('board'\)"/);
  assert.match(view.innerHTML,/Board columns<\/main>/);
- assert.equal(location.hash,'#multiplier');
+ assert.doesNotMatch(view.innerHTML,/Content Multiplier sections/);
 
  location.hash='#content-board';
  sandbox.contentBoardPage(view);
  assert.match(view.innerHTML,/Board columns<\/main>/);
- assert.match(view.innerHTML,/Content Multiplier sections/);
  vm.runInContext("mlTab('plan')",sandbox);
  assert.equal(location.hash,'multiplier');
  assert.match(view.innerHTML,/Current plan<\/main>/);

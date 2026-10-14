@@ -178,6 +178,12 @@ button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}
       <button data-page="dna">⚯ Brand DNA</button>
       <button data-page="guidelines">☷ Brand Guidelines</button>
       <button data-page="multiplier">⌘ Content Multiplier</button>
+      <div class="nav-subnav" aria-label="Content Multiplier sections">
+        <button data-multiplier-tab="plan">◌ Current plan</button>
+        <button data-multiplier-tab="history">↺ Multiplication history</button>
+        <button data-multiplier-tab="sources">▤ Source library</button>
+        <button data-multiplier-tab="board">▦ Content Board</button>
+      </div>
       <div class="section">AI Partners</div>
       <button data-page="brandie">◉ Brandie</button>
       <button data-page="kraftie">✎ Kraftie</button>
@@ -238,15 +244,16 @@ document.getElementById('authForm').addEventListener('submit',e=>{e.preventDefau
 document.getElementById('resetBtn').addEventListener('click',()=>{if(typeof resetActiveWorkspace==='function'){resetActiveWorkspace();return}localStorage.removeItem(KEY);location.reload()});
 document.getElementById('sidebarToggle').addEventListener('click',()=>{const app=document.getElementById('app'),collapsed=app.classList.toggle('sidebar-collapsed'),btn=document.getElementById('sidebarToggle');btn.textContent=collapsed?'→':'←';btn.setAttribute('aria-label',collapsed?'Expand sidebar':'Collapse sidebar')});
 
-document.querySelectorAll('.nav button').forEach(b=>{const parts=b.textContent.trim().split(/\s+/),icon=parts.shift(),label=parts.join(' '),portrait={brandie:'assets/brandie-avatar.png',kraftie:'assets/kraftie-avatar.png'}[b.dataset.page];b.dataset.tooltip=label;b.setAttribute('aria-label',label);b.classList.toggle('nav-with-avatar',!!portrait);b.innerHTML=`${portrait?`<img class="nav-avatar" src="${portrait}" alt="" width="34" height="34">`:`<span class="nav-icon">${icon}</span>`}<span class="nav-label">${label}</span>`;b.addEventListener('click',()=>location.hash=b.dataset.page)});
+document.querySelectorAll('.nav button').forEach(b=>{const parts=b.textContent.trim().split(/\s+/),icon=parts.shift(),label=parts.join(' '),portrait={brandie:'assets/brandie-avatar.png',kraftie:'assets/kraftie-avatar.png'}[b.dataset.page];b.dataset.tooltip=label;b.setAttribute('aria-label',label);b.classList.toggle('nav-with-avatar',!!portrait);b.innerHTML=`${portrait?`<img class="nav-avatar" src="${portrait}" alt="" width="34" height="34">`:`<span class="nav-icon">${icon}</span>`}<span class="nav-label">${label}</span>`;b.addEventListener('click',()=>{if(b.dataset.multiplierTab){mlTab(b.dataset.multiplierTab);return}if(b.dataset.page==='multiplier'){mlTab('plan');return}location.hash=b.dataset.page})});
 window.addEventListener('hashchange',render);
 
 function render(){
  if(!state.session){document.getElementById('authScreen').classList.remove('hidden');document.getElementById('app').style.display='none';return}
  showApp();
  const page=location.hash.slice(1)||(!state.brand.created?'onboarding':'overview');
- document.querySelectorAll('.nav button').forEach(b=>{b.classList.toggle('active',b.dataset.page===page);b.classList.toggle('parent-active',(b.dataset.page==='brand'&&['archetype','clarity'].includes(page))||(b.dataset.page==='multiplier'&&page==='content-board'))});
- document.getElementById('crumb').textContent=page==='onboarding'?'Create your brand':page==='archetype'?'Brand Archetype':page==='multiplier'?'AI Generator':page==='content-board'?'Content Board':page[0].toUpperCase()+page.slice(1);
+ if(page==='content-board'&&typeof ml!=='undefined')ml.tab='board';
+ document.querySelectorAll('.nav button').forEach(b=>{const multiplierTabActive=['multiplier','content-board'].includes(page)&&typeof ml!=='undefined'&&b.dataset.multiplierTab===ml.tab;b.classList.toggle('active',b.dataset.page===page||!!b.dataset.multiplierTab&&multiplierTabActive);b.classList.toggle('parent-active',(b.dataset.page==='brand'&&['archetype','clarity'].includes(page))||(b.dataset.page==='multiplier'&&page==='content-board'))});
+ document.getElementById('crumb').textContent=page==='onboarding'?'Create your brand':page==='archetype'?'Brand Archetype':page==='multiplier'?'Content Multiplier · '+({plan:'Current plan',history:'Multiplication history',sources:'Source library',board:'Content Board'}[typeof ml==='undefined'?'plan':ml.tab]||'Current plan'):page==='content-board'?'Content Board':page[0].toUpperCase()+page.slice(1);
  const v=document.getElementById('view');
  ({overview:overview,brand:brandPage,archetype:archetypePage,clarity:clarityPage,funnel:funnelPage,website:websitePage,dna:dnaPage,guidelines:guidelinesPage,multiplier:multiplierPage,'content-board':contentBoardPage,brandie:brandiePage,kraftie:kraftiePage,assets:assetsPage,onboarding:onboardingPage}[page]||overview)(v);
 }

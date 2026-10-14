@@ -5,19 +5,18 @@ const mlEsc=value=>esc(String(value??''));
 const mlDate=value=>value?new Date(value).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'}):'';
 async function mlRequest(entity,method='GET',body,id){const bridge=mlCloud(),workspaceId=bridge?.workspaceId();if(!workspaceId)throw Error('Open a signed-in workspace first.');const url='/api/multiplier-library?workspaceId='+encodeURIComponent(workspaceId)+'&entity='+entity+(id?'&id='+encodeURIComponent(id):'');if(body instanceof FormData){const response=await fetch(url,{method,credentials:'same-origin',body});const data=await response.json();if(!response.ok)throw Error(data.error||'Upload failed.');return data}return bridge.request(url,{method,...(body?{body:JSON.stringify(body)}:{})})}
 async function mlLoad(force=false){const workspace=mlCloud()?.workspaceId();if(!workspace||ml.loading||ml.loaded&&!force&&ml.workspace===workspace)return;ml.loading=true;ml.workspace=workspace;try{const [s,r]=await Promise.all([mlRequest('sources'),mlRequest('rounds')]);if(mlCloud()?.workspaceId()!==workspace)return;ml.sources=s.sources;ml.rounds=r.rounds;ml.loaded=true;if(!brandOsJob&&state.multiplier.result&&!state.multiplier.activeRoundId&&!state.multiplier.pendingRoundKey)await mlSaveCurrent();if(location.hash==='#multiplier')render()}catch(error){if(location.hash==='#multiplier')toast(error.message)}finally{ml.loading=false}}
-function mlTab(tab){ml.tab=tab;if(location.hash==='#content-board'&&tab!=='board')location.hash='multiplier';render()}
+function mlTab(tab){ml.tab=tab;if(location.hash!=='#multiplier')location.hash='multiplier';render()}
 const mlBasePage=multiplierPage;
 const mlBoardBasePage=contentBoardPage;
 multiplierPage=function(v){
  if(ml.workspace!==mlCloud()?.workspaceId()){
   ml.workspace=mlCloud()?.workspaceId();ml.loaded=false;ml.sources=[];ml.rounds=[];
-  ml.tab=location.hash==='#content-board'?'board':'plan';
+  if(location.hash==='#content-board')ml.tab='board';
  }
  if(ml.tab==='plan')mlBasePage(v);
  else if(ml.tab==='board')mlBoardBasePage(v);
  else v.innerHTML=`<div class="hero"><div><div class="eyebrow">KRAFTED Content Multiplier™</div><h1>${ml.tab==='history'?'Multiplication history.':'Source library.'}</h1><p>${ml.tab==='history'?'Revisit and reuse every round of content planning.':'Keep original thinking ready for the next content round.'}</p></div></div>`+(ml.tab==='history'?mlHistory():mlSources());
- v.insertAdjacentHTML('afterbegin',`<nav class="ml-tabs" aria-label="Content Multiplier sections"><button class="${ml.tab==='plan'?'active':''}" onclick="mlTab('plan')">Current plan</button><button class="${ml.tab==='history'?'active':''}" onclick="mlTab('history')">Multiplication history</button><button class="${ml.tab==='sources'?'active':''}" onclick="mlTab('sources')">Source library</button><button class="${ml.tab==='board'?'active':''}" onclick="mlTab('board')">Content Board</button></nav>`);
- if(ml.tab==='plan'){const m=state.multiplier;const chips=(m.sourceIds||[]).map(id=>ml.sources.find(x=>x.id===id)?.title).filter(Boolean);v.querySelector('.ml-tabs').insertAdjacentHTML('afterend',`<div class="ml-actions"><button class="btn orange" onclick="mlNew()">+ New Multiplication</button>${m.result?'<button class="btn secondary" onclick="mlAnotherRound()">Generate another round</button>':''}${m.result&&!m.activeRoundId?'<button class="btn secondary" onclick="mlSaveCurrent()">Save current plan to history</button>':''}<button class="btn secondary" onclick="mlTab('sources')">Add a source</button></div>${chips.length?`<div class="ml-source-chips">${chips.map(x=>`<span>📎 ${mlEsc(x)}</span>`).join('')}</div>`:''}`)}
+ if(ml.tab==='plan'){const m=state.multiplier;const chips=(m.sourceIds||[]).map(id=>ml.sources.find(x=>x.id===id)?.title).filter(Boolean);v.querySelector('.hero')?.insertAdjacentHTML('afterend',`<div class="ml-actions"><button class="btn orange" onclick="mlNew()">+ New Multiplication</button>${m.result?'<button class="btn secondary" onclick="mlAnotherRound()">Generate another round</button>':''}${m.result&&!m.activeRoundId?'<button class="btn secondary" onclick="mlSaveCurrent()">Save current plan to history</button>':''}<button class="btn secondary" onclick="mlTab('sources')">Add a source</button></div>${chips.length?`<div class="ml-source-chips">${chips.map(x=>`<span>📎 ${mlEsc(x)}</span>`).join('')}</div>`:''}`)}
  if(ml.tab==='board')v.querySelectorAll('.cb-hero-actions button:first-child,.cb-inbox .row button').forEach(button=>button.onclick=()=>mlTab('plan'));
  mlLoad()
 };

@@ -19,11 +19,15 @@ export async function verifiedSessionUser(request,{getUser,identityUrl,cookieGet
  let url;
  try{url=new URL(identityUrl.replace(/\/+$/,'')+'/user');if(url.protocol!=='https:')return null}catch{return null}
  const tokens=sessionTokens(request,cookieGet);
- console.info('brand-session-diagnostic',JSON.stringify({bearer:request.headers.has('authorization'),rawCookie:request.headers.has('cookie'),runtimeCookie:!!cookieGet?.('nf_jwt'),tokenCount:tokens.length}));
+ console.info('brand-session-diagnostic',JSON.stringify({bearer:request.headers.has('authorization'),rawCookie:request.headers.has('cookie'),runtimeCookie:!!cookieGet?.('nf_jwt'),tokenCount:tokens.length,identityHostMatchesRequest:url.host===new URL(request.url).host,identityPath:url.pathname}));
  for(const token of tokens){
   try{
    const response=await fetchUser(url,{headers:{Authorization:`Bearer ${token}`},cache:'no-store',signal:AbortSignal.timeout(5000)});
-   console.info('brand-session-verification',response.status);
+   if(!response.ok){
+    const body=await response.clone().json().catch(()=>null);
+    const description=[body?.msg,body?.error,body?.error_description].filter(value=>typeof value==='string').join(' ');
+    console.info('brand-session-verification',JSON.stringify({status:response.status,contentType:response.headers.get('content-type'),invalid:/invalid/i.test(description),expired:/expir/i.test(description),missing:/missing|absent|required/i.test(description),errorKeys:body&&typeof body==='object'?Object.keys(body).slice(0,8):[]}));
+   }
    if(!response.ok)continue;
    const user=await response.json();
    if(typeof user?.id!=='string'||!user.id||typeof user?.email!=='string'||!user.email)continue;

@@ -15,7 +15,7 @@ async function runBrandOsAI(task,options,apply,unchanged=()=>true){
  const context=brandOsContext(),fingerprint=JSON.stringify(context),owner=state,controller=new AbortController();brandOsJob=controller;brandOsJobMessage='Optimizing with your Brand OS context…';aiStatus();
  const timeout=setTimeout(()=>controller.abort(),65000);
  try{
-  const response=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({task,context,options}),signal:controller.signal});
+  const response=await (globalThis.brandOsAuthorizedFetch||fetch)('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({task,context,options}),signal:controller.signal});
   if(!response.headers.get('content-type')?.includes('application/json'))throw Error('The AI connection is unavailable. Your current content is unchanged.');
   const result=await response.json();if(!response.ok)throw Error(result.error||'Generation failed. Please retry.');
   if(!result.data)throw Error('The AI returned an empty draft. Please retry.');

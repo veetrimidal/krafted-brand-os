@@ -15,3 +15,17 @@
     max-height: 420px;
   }
 }
+/* Give the dominant result a clear first read without downplaying the others. */
+#view .archetype-top-three{grid-template-columns:minmax(0,1.18fr) repeat(2,minmax(0,1fr));gap:16px;align-items:stretch;padding:7px 5px 20px}
+html #view .archetype-top-three .archetype-rank-card:first-child{position:relative;z-index:1;transform:translateY(-5px);padding:23px;background:linear-gradient(145deg,#3b291d,#241d17 68%,#1a2119);border:2px solid #f08a41;color:#fff4e8;box-shadow:0 0 0 5px rgba(240,138,65,.12),0 20px 38px rgba(0,0,0,.28)}
+html #view .archetype-top-three .archetype-rank-card:first-child .kicker{display:inline-flex;align-items:center;width:max-content;max-width:100%;padding:7px 10px;border-radius:999px;background:#f08a41;color:#25180f;font-size:11px;letter-spacing:.1em}
+html #view .archetype-top-three .archetype-rank-card:first-child h2{font-size:clamp(26px,2.4vw,32px)}
+html #view .archetype-top-three .archetype-rank-card:first-child .archetype-portrait{border:2px solid rgba(255,180,119,.8)}
+html #view .archetype-top-three .archetype-rank-card:first-child .rank-score{color:#ffb477}
+html #view .archetype-top-three .archetype-rank-card:first-child .muted{color:#e2cbb6}
+html[data-theme="light"] #view .archetype-top-three .archetype-rank-card:first-child{background:linear-gradient(145deg,#fff3e7,#ffead5);border-color:#b85b26;color:#382718;box-shadow:0 0 0 5px rgba(184,91,38,.12),0 16px 32px rgba(80,41,20,.14)}
+html[data-theme="light"] #view .archetype-top-three .archetype-rank-card:first-child .kicker{background:#a94716;color:#fffaf5}
+html[data-theme="light"] #view .archetype-top-three .archetype-rank-card:first-child .rank-score{color:#984519}
+html[data-theme="light"] #view .archetype-top-three .archetype-rank-card:first-child .muted{color:#705640}
+html[data-theme="light"] #view .archetype-top-three .archetype-rank-card:first-child .archetype-portrait{border-color:#d7894b}
+@media(max-width:850px){#view .archetype-top-three{grid-template-columns:1fr;padding:0 0 16px}html #view .archetype-top-three .archetype-rank-card:first-child{transform:none}}

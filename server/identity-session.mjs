@@ -22,6 +22,11 @@ export async function verifiedSessionUser(request,{getUser,identityUrl,cookieGet
  console.info('brand-session-diagnostic',JSON.stringify({bearer:request.headers.has('authorization'),rawCookie:request.headers.has('cookie'),runtimeCookie:!!cookieGet?.('nf_jwt'),tokenCount:tokens.length,identityHostMatchesRequest:url.host===new URL(request.url).host,identityPath:url.pathname}));
  for(const token of tokens){
   try{
+   try{
+    const claims=JSON.parse(Buffer.from(token.split('.')[1],'base64url').toString('utf8'));
+    const now=Math.floor(Date.now()/1000);
+    console.info('brand-session-timing',JSON.stringify({expiresInMinutes:Number.isFinite(claims.exp)?Math.round((claims.exp-now)/60):null,issuedMinutesAgo:Number.isFinite(claims.iat)?Math.round((now-claims.iat)/60):null}));
+   }catch{}
    const response=await fetchUser(url,{headers:{Authorization:`Bearer ${token}`},cache:'no-store',signal:AbortSignal.timeout(5000)});
    if(!response.ok){
     const body=await response.clone().json().catch(()=>null);

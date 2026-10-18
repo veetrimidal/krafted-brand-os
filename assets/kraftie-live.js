@@ -36,7 +36,7 @@ async function kraftieRequest(c){
  const controller=new AbortController();kraftieRequests.set(c.id,controller);const timeout=setTimeout(()=>controller.abort(),55000);
  kraftieSaveSafely();render();
  try{
-  const response=await fetch('/api/kraftie',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages,context}),signal:controller.signal});
+  const response=await (globalThis.brandOsAuthorizedFetch||fetch)('/api/kraftie',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages,context}),signal:controller.signal});
   if(!response.ok){let message=response.status===429?'Kraftie is busy. Please try again in a minute.':'Kraftie is unavailable. Please try again.';if(response.status===404)message='The Kraftie backend is not deployed on this site yet.';try{message=(await response.json()).error||message}catch{}throw new Error(message)}
   if(!response.headers.get('content-type')?.includes('application/x-ndjson')||!response.body)throw new Error('The Kraftie backend is not available on this site yet.');
   const reader=response.body.getReader(),decoder=new TextDecoder();let buffer='',done=false;

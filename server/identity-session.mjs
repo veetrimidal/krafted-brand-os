@@ -18,9 +18,12 @@ export async function verifiedSessionUser(request,{getUser,identityUrl,cookieGet
  if(!identityUrl)return await getUser();
  let url;
  try{url=new URL(identityUrl.replace(/\/+$/,'')+'/user');if(url.protocol!=='https:')return null}catch{return null}
- for(const token of sessionTokens(request,cookieGet)){
+ const tokens=sessionTokens(request,cookieGet);
+ console.info('brand-session-diagnostic',JSON.stringify({bearer:request.headers.has('authorization'),rawCookie:request.headers.has('cookie'),runtimeCookie:!!cookieGet?.('nf_jwt'),tokenCount:tokens.length}));
+ for(const token of tokens){
   try{
    const response=await fetchUser(url,{headers:{Authorization:`Bearer ${token}`},cache:'no-store',signal:AbortSignal.timeout(5000)});
+   console.info('brand-session-verification',response.status);
    if(!response.ok)continue;
    const user=await response.json();
    if(typeof user?.id!=='string'||!user.id||typeof user?.email!=='string'||!user.email)continue;

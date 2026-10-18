@@ -1,4 +1,4 @@
-import {login as identityLogin,signup,logout as identityLogout,getSettings,handleAuthCallback,requestPasswordRecovery,updateUser,oauthLogin,onAuthChange} from '@netlify/identity';
+import {login as identityLogin,signup,logout as identityLogout,getSettings,handleAuthCallback,requestPasswordRecovery,updateUser,oauthLogin,onAuthChange,refreshSession} from '@netlify/identity';
 let account=null,settings=null,workspaces=[],active=null,pending=null,saving=null,saveTimer=null,saveFailure='',booting=true,loggingOut=false;
 const originalRender=render;
 const gate=document.createElement('section');gate.id='accountGate';document.body.append(gate);
@@ -9,7 +9,16 @@ function lock(){document.documentElement.classList.add('account-locked');state.s
 function unlock(){document.documentElement.classList.remove('account-locked');gate.hidden=true}
 function panel(title,copy,content=''){gate.hidden=false;gate.innerHTML=`<div class="account-card"><img class="account-logo" src="assets/krafted-brand-os-logo.png" alt="Krafted Brand OS"><div class="kicker">Your brand. One connected workspace.</div><h1>${esc(title)}</h1><p>${esc(copy)}</p>${content}<p id="accountMessage" role="status" aria-live="polite"></p></div>`}
 function message(text){const el=document.getElementById('accountMessage');if(el)el.textContent=text}
-async function api(path,options={}){const response=await fetch(path,{credentials:'same-origin',...options,headers:{'Content-Type':'application/json',...options.headers}});let result;try{result=await response.json()}catch{throw Error('Account services are unavailable. Please try again.')}if(!response.ok){const e=Error(result.error||'Request failed.');e.status=response.status;throw e}return result}
+async function authorizedFetch(path,options={}){
+ // GoTrue's saved session holds the token actually accepted by Identity.
+ await refreshSession();
+ let token;try{token=JSON.parse(localStorage.getItem('gotrue.user')||'null')?.token?.access_token}catch{}
+ const headers=new Headers(options.headers);
+ if(typeof token==='string'&&/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(token))headers.set('Authorization','Bearer '+token);
+ return fetch(path,{credentials:'same-origin',...options,headers});
+}
+window.brandOsAuthorizedFetch=authorizedFetch;
+async function api(path,options={}){const response=await authorizedFetch(path,{...options,headers:{'Content-Type':'application/json',...options.headers}});let result;try{result=await response.json()}catch{throw Error('Account services are unavailable. Please try again.')}if(!response.ok){const e=Error(result.error||'Request failed.');e.status=response.status;throw e}return result}
 function authView(mode='login'){
  lock();const signupMode=mode==='signup',recovery=mode==='recovery',reset=mode==='reset';
  panel(reset?'Choose a new password':recovery?'Reset your password':signupMode?'Create your account':'Welcome back',reset?'Set a secure password, then return to your Brand OS.':recovery?'We’ll send a password reset link if an account exists.':signupMode?'Register with your email and verify it to access Brand OS. No payment required.':'Sign in to your private Brand OS.',`<form id="secureAuthForm">${signupMode?'<label for="secureName">Full name</label><input id="secureName" autocomplete="name" required maxlength="100">':''}${!reset?'<label for="secureEmail">Email</label><input id="secureEmail" type="email" autocomplete="email" required>':''}${!recovery?`<label for="securePassword">Password</label><input id="securePassword" type="password" autocomplete="${signupMode||reset?'new-password':'current-password'}" minlength="${signupMode||reset?12:1}" required>${signupMode||reset?'<small>Use at least 12 characters.</small>':''}`:''}<button class="btn orange full" type="submit">${reset?'Save new password':recovery?'Send reset link':signupMode?'Create account':'Sign in'}</button></form><div class="account-links">${!signupMode&&!recovery&&!reset&&!settings?.disableSignup?'<button type="button" id="showSignup">Create an account</button>':''}${!recovery&&!reset?'<button type="button" id="showRecovery">Forgot password?</button>':''}${mode!=='login'?'<button type="button" id="showLogin">Back to sign in</button>':''}</div><div id="oauthButtons" class="account-links"></div>`);

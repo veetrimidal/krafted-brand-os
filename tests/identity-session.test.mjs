@@ -18,6 +18,13 @@ test('a cookie session is accepted only after Identity verifies it',async()=>{
  assert.deepEqual(seen,[{url:identityUrl+'/user',authorization:'Bearer '+validToken}]);
 });
 
+test('a fresh bearer token wins over a stale cookie session',async()=>{
+ const calls=[];
+ const req=new Request('https://kraftedbrandos.netlify.app/api/account',{headers:{authorization:`Bearer ${validToken}`,cookie:'nf_jwt=old.token.value'}});
+ const user=await verifiedSessionUser(req,{getUser:async()=>{throw Error('SDK fallback should not run')},identityUrl,fetchUser:async(_url,options)=>{calls.push(options.headers.Authorization);return options.headers.Authorization==='Bearer '+validToken?Response.json({id:'one',email:'one@example.com',confirmed_at:'2026-10-01'}):new Response(null,{status:401})}});
+ assert.equal(user?.id,'one');assert.deepEqual(calls,['Bearer '+validToken]);
+});
+
 test('an invalid or rejected cookie cannot authorize a user',async()=>{
  const denied=await verifiedSessionUser(request(`nf_jwt=${validToken}`),{getUser:async()=>null,identityUrl,fetchUser:async()=>new Response(null,{status:401})});
  assert.equal(denied,null);

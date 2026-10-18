@@ -32,7 +32,7 @@ async function brandieRequest(c){
  const controller=new AbortController();brandieRequests.set(c.id,controller);const timeout=setTimeout(()=>controller.abort(),55000);
  brandieSaveSafely();render();
  try{
-  const response=await fetch('/api/brandie',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages,context}),signal:controller.signal});
+  const response=await (globalThis.brandOsAuthorizedFetch||fetch)('/api/brandie',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages,context}),signal:controller.signal});
   if(!response.ok){let message=response.status===429?'Brandie is busy. Please try again in a minute.':'Brandie is unavailable. Please try again.';if(response.status===404)message='The Brandie backend is not deployed on this site yet.';try{message=(await response.json()).error||message}catch{}throw new Error(message)}
   if(!response.headers.get('content-type')?.includes('application/x-ndjson')||!response.body)throw new Error('The Brandie backend is not available on this site yet.');
   const reader=response.body.getReader(),decoder=new TextDecoder();let buffer='',done=false;

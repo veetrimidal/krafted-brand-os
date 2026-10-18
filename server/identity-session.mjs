@@ -2,6 +2,8 @@ const jwtPattern=/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/;
 
 function sessionTokens(request,cookieGet){
  const tokens=new Set();
+ const bearer=/^Bearer\s+(.+)$/i.exec(request.headers.get('authorization')||'');
+ if(bearer)tokens.add(bearer[1].trim());
  for(const part of (request.headers.get('cookie')||'').split(';')){
   const at=part.indexOf('=');
   if(at<0||part.slice(0,at).trim()!=='nf_jwt')continue;
@@ -13,9 +15,7 @@ function sessionTokens(request,cookieGet){
 }
 
 export async function verifiedSessionUser(request,{getUser,identityUrl,cookieGet,fetchUser=fetch}){
- const current=await getUser();
- if(current?.id)return current;
- if(!identityUrl)return null;
+ if(!identityUrl)return await getUser();
  let url;
  try{url=new URL(identityUrl.replace(/\/+$/,'')+'/user');if(url.protocol!=='https:')return null}catch{return null}
  for(const token of sessionTokens(request,cookieGet)){
@@ -27,5 +27,5 @@ export async function verifiedSessionUser(request,{getUser,identityUrl,cookieGet
    return {id:user.id,email:user.email,name:user.user_metadata?.full_name||user.email,confirmedAt:user.confirmed_at||user.confirmedAt||null};
   }catch{}
  }
- return null;
+ return await getUser();
 }
